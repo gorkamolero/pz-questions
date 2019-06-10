@@ -4,19 +4,42 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "build": "vue-cli-service build",
+    "pui": "npm config set '@bit:registry' https://node.bit.dev && bit init && bit login"
   },
   "dependencies": {
+    "@bit/pickzen.pui.core.pz-boiler": "^1.0.0",
+    "@bit/pickzen.pui.core.typer": "^0.0.1",
     "core-js": "^2.6.5",
+    "undo-redo-vuex": "^1.1.7",
     "vue": "^2.6.10",
+    "vue-markdown": "^2.2.4",
     "vue-router": "^3.0.3",
-    "vuex": "^3.0.1"
+    "vuesax": "^3.8.74",
+    "vuex": "^3.0.1",
+    "vuex-pathify": "^1.2.2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.8.0",
     "@vue/cli-service": "^3.8.0",
-    "sass": "^1.18.0",
+    "normalize-scss": "^7.0.1",
+    "sass": "^1.21.0",
     "sass-loader": "^7.1.0",
+    "vue-cli-plugin-pz-boiler": "^0.1.0",
     "vue-template-compiler": "^2.6.10"
+  },
+  "bit": {
+    "env": {
+      "compiler": "bit.envs/bundlers/vue@2.5.0"
+    },
+    "componentsDefaultDirectory": "src/components/{name}",
+    "packageManager": "npm",
+    "overrides": {
+      "pickzen.pui/core/styles": {
+        "env": {
+          "compiler": "bit.envs/bundlers/vue@2.5.0"
+        }
+      }
+    }
   }
 }

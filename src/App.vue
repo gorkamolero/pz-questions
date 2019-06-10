@@ -1,29 +1,40 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+  <PZBoiler id="app">
+    <div class="Container">
+      <QBuilder />
     </div>
-    <router-view/>
-  </div>
+    <div class="Container">
+      <QPreview />
+    </div>
+  </PZBoiler>
 </template>
+
+<script>
+import PZBoiler from '@bit/pickzen.pui.core.pz-boiler/PZBoiler'
+import QBuilder from './components/QBuilder'
+import QPreview from './components/QPreview'
+
+export default {
+  name: 'app',
+  components: {
+    PZBoiler,
+    QBuilder,
+    QPreview
+  }
+}
+</script>
 
 <style lang="scss">
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+  display: flex;
 }
-#nav {
-  padding: 30px;
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+.Container {
+  width: calc(100vw / 3);
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  & + & { border-left: 1px solid }
 }
 </style>
