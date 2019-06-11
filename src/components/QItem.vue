@@ -10,10 +10,10 @@ import { call } from 'vuex-pathify'
 export default {
   props: ['question', 'index'],
   methods: {
-    onChange (e) {
+    onChange ({target}) {
       this.update({
         index: this.index,
-        content: e.target.value
+        content: target.value
       })
     },
     update: call('questions/updateQuestion')
