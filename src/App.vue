@@ -10,6 +10,7 @@
 </template>
 
 <script>
+import 'material-icons/iconfont/material-icons.css'
 import PZBoiler from '@bit/pickzen.pui.core.pz-boiler/PZBoiler'
 import QBuilder from './components/QBuilder'
 import QPreview from './components/QPreview'
@@ -37,4 +38,6 @@ export default {
 
   & + & { border-left: 1px solid }
 }
+
+.puiSpaceOut { >  * + * { margin-left: var(--space-s) } }
 </style>

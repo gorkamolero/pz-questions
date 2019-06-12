@@ -1,34 +1,42 @@
 <template>
   <div class="QBuilder">
     <h1>Lista</h1>
-    <QList v-if="questions">
+    <br>
+    <QList v-if="Qs">
       
-      <QItem v-for="(question, index) in questions" 
+      <QItem v-for="(question, index) in Qs" 
         :question="question"
         :index="index"
-        :key="question"
+        :key="index"
       />
     </QList>
+
+    <QActions />
   </div>
 </template>
 
 <script>
-import { sync } from 'vuex-pathify'
+import { get } from 'vuex-pathify'
 import QList from '@/components/QList'
 import QItem from '@/components/QItem'
+import QActions from '@/components/QActions'
 
 export default {
   components: {
-    QList, QItem
+    QList, QItem, QActions
   },
   data: () => ({
   }),
+  mounted() {
+  },
   computed: {
-    questions: sync('questions/items'),
+    Qs: get('Qs/items'),
   }
 }
 </script>
 
-<style>
-
+<style lang="scss">
+  .QBuilder {
+    position: relative;
+  }
 </style>

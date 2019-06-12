@@ -12,7 +12,7 @@
 import { get } from 'vuex-pathify'
 export default {
   computed: {
-    questions: get('questions/items')
+    questions: get('Qs/items')
   }
 }
 </script>

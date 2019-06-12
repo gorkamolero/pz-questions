@@ -1,6 +1,10 @@
 <template>
   <article class="QItem">
-    <vs-input :value="question" @change="onChange">{{ question }}</vs-input>
+    <div class="QTitle puiSpaceOut">
+      <vs-input :value="question.title" @change="onChange">{{ question.title }}</vs-input>
+      <vs-button @click="removeQ(question.id)"  size="small" radius color="primary" type="border" icon="remove" tabindex="-1" />
+    </div>
+    
   </article>
 </template>
 
@@ -12,11 +16,12 @@ export default {
   methods: {
     onChange ({target}) {
       this.update({
-        index: this.index,
+        id: this.question.id,
         content: target.value
       })
     },
-    update: call('questions/updateQuestion')
+    update: call('Qs/updateQuestion'),
+    removeQ: call('Qs/removeQuestion')
   },
 }
 </script>
@@ -56,6 +61,11 @@ export default {
 		&.active .QItemNav {
       opacity: 1;
     }
+  }
+
+  .QTitle {
+    display: flex;
+    align-items: center;
   }
 
   .QSorting {

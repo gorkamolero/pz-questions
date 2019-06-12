@@ -20,41 +20,51 @@ const qSchema = {
 }
 
 const initQs = [
-	{
-		id: 100,
-		type: 'filter',
-		title: 'Yo estoy en medio'
-	},
-	{
-		id: 1,
-		type: 'end',
-		title: 'Adiós, soy el Final'
-	},
-	{
-		id: 0,
-		type: 'cover',
-		title: 'Hola, soy el principio!'
-	},
-	{
-		id: 101,
-		type: 'filter',
-		title: 'Yo tambien'
-	},
+  {
+    id: 0,
+    title: 'Hola, soy el principio!',
+  },
+  {
+    id: 1,
+    title: 'Yo estoy en medio'
+  },
+  {
+    id: 2,
+    title: 'Yo tambien'
+  },
+  {
+    id: 3,
+    title: 'Adiós, soy el Final'
+  }
 ]
 
-// Everything in its right place
-const comoDiosManda = array => {
-	const cover = array.find(q => q.type === 'cover')
-	const end = array.find(q => q.type === 'end')
-	const noCoverNoFilter = array.filter(q => !['cover', 'end'].includes(q.type))
+const initQs2 = [
+  {
+    id: 0,
+    title: 'Hola, soy el principio!',
+  },
+  {
+    id: 1,
+    title: 'Yo estoy en medio'
+  },
+  {
+    id: 2,
+    title: 'Yo tambien'
+  },
+  {
+    id: 3,
+    title: 'Adiós, soy el Final'
+  }
+]
 
-	return [cover, ...noCoverNoFilter, end]
+let state = {
+  items: []
+  //items: [ ...initQs ]
 }
 
-
-const state = {
-	items: [...initQs]
-}
+initQs.forEach((question, index) => {
+  state.items[index] = { ...question }
+})
 
 const actions = {
 	reload: ({commit}) => commit( 'emptyState' ),
@@ -65,8 +75,14 @@ const actions = {
 }
 
 const mutations = {
-	emptyState: state => {
-		state.items = [...initQs]
+	emptyState: (state) => {
+    //state.items = [...initQs]
+    
+    initQs.forEach((question, index) => {
+      Object.entries(question).forEach(([key, value]) => {
+        Vue.set(state.items[index], key, value)
+      })
+    })
 	},
 	// Set items and so on	
 	addQuestion: (state, question) => state.items.push(question),
@@ -76,8 +92,9 @@ const mutations = {
 	},
 
 	updateQuestion: ({items}, { id, content }) => {
-		const index = items.findIndex(q => q.id === id)
-		Vue.set(state.items[index], 'title', content)
+    const index = items.findIndex(q => q.id === id)
+    console.log(index)
+		Vue.set(items[index], 'title', content)
 	},
 
 	...make.mutations(state),
