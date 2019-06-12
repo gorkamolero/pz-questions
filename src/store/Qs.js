@@ -38,29 +38,11 @@ const initQs = [
   }
 ]
 
-const initQs2 = [
-  {
-    id: 0,
-    title: 'Hola, soy el principio!',
-  },
-  {
-    id: 1,
-    title: 'Yo estoy en medio'
-  },
-  {
-    id: 2,
-    title: 'Yo tambien'
-  },
-  {
-    id: 3,
-    title: 'Adiós, soy el Final'
-  }
-]
+const getDefaultState = () => ({
+  items: [...initQs]
+})
 
-let state = {
-  items: []
-  //items: [ ...initQs ]
-}
+let state = getDefaultState()
 
 initQs.forEach((question, index) => {
   state.items[index] = { ...question }
