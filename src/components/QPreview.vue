@@ -1,16 +1,21 @@
 <template>
   <div class="QPreview">
-    <h1>Preview</h1>
-
-    <ul>
-      <li v-for="question in questions">{{ question }}</li>
-    </ul>
+    <vue-json-pretty
+      :path="'res'"
+      :data="questions"
+      @click="handleClick">
+    </vue-json-pretty>
   </div>
 </template>
 
 <script>
 import { get } from 'vuex-pathify'
+import VueJsonPretty from 'vue-json-pretty'
+
 export default {
+  components: {
+    VueJsonPretty
+  },
   computed: {
     questions: get('Qs/items')
   }

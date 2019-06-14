@@ -57,15 +57,12 @@ export default {
 		field: String
   },
   watch: {
-    content (newValue) {
-      console.log(newValue)
+    content () {
+      if (this.content === this.editor.getHTML()) return
       this.editor.setContent(this.content)
     }
   },
   methods: {
-    onChange ({target}) {
-      
-    },
     update: call('Qs/updateQuestion'),
   },
   data() {
@@ -92,26 +89,13 @@ export default {
 					clearTimeout(this.timeout)
 					
 					// Wait half a second without input before running update
-					this.timeout = setTimeout(() => {
-						/* this.$emit('contentUpdate', {
-							field: this.field,
-							content: getHTML()
-            }) */
-            
+					this.timeout = setTimeout(() => {            
             this.update({
               id: this.id,
               content: getHTML()
             })
-					//	this.editor.clearContent()
-					}, 500)
+					}, 1500)
 				},
-				/* onBlur() {
-					// Clear timeout each time a key is pressed
-					this.$emit('contentUpdate', {
-						field: this.field,
-						content: this.getHTML()
-					})
-				} */
       })
     }
 	},

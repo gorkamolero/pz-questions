@@ -3,7 +3,7 @@
     <div class="QTitle puiSpaceOut">
       <QTextEditor :id="question.id" :content="question.title" field="title" />
 
-      <vs-button @click="removeQ(question.id)"  size="small" radius color="primary" type="border" icon="remove" tabindex="-1" />
+      <vs-button @click="removeQ(question.id)" size="small" radius color="dark" type="border" icon="remove" tabindex="-1" class="x-small" />
     </div>
     
   </article>
@@ -30,7 +30,17 @@ export default {
     display: flex;
     user-select: none;
 		border-bottom: var(--border);
-    padding: var(--space-s) 0;
+    padding: var(--space) 0;
+
+    & + &:before {
+      content: '';
+      height: 0px;
+      width: calc(100% - var(--space-l) * 2);
+      border-bottom: 1px solid var(--light-grey);
+      position: absolute;
+      top: 0;
+      left: 50%; transform: translateX(-50%);
+    }
     
 
     &Inner { padding: var(--spacing) 0; }
@@ -64,6 +74,8 @@ export default {
   .QTitle {
     display: flex;
     align-items: center;
+    flex: 1;
+    justify-content: space-between;
   }
 
   .QSorting {
@@ -84,4 +96,8 @@ export default {
 	.QItemSorting {
 		//transform: rotateY(50deg);
 	}
+
+  .x-small {
+    transform: scale(.75)
+  }
 </style>

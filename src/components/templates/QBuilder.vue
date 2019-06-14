@@ -1,7 +1,5 @@
 <template>
   <div class="QBuilder">
-    <h1>Lista</h1>
-    <br>
     <QList v-if="Qs">
       
       <QItem v-for="(question, index) in Qs" 
@@ -38,5 +36,12 @@ export default {
 <style lang="scss">
   .QBuilder {
     position: relative;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+
+    .QActions {
+      margin-top: auto;
+    }
   }
 </style>
