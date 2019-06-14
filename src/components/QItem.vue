@@ -3,7 +3,7 @@
     <div class="QTitle puiSpaceOut">
       <QTextEditor :id="question.id" :content="question.title" field="title" />
 
-      <vs-button @click="removeQ(question.id)" size="small" radius color="dark" type="border" icon="remove" tabindex="-1" class="x-small" />
+      <vs-button @click="removeQ(question.id)" size="small" radius color="dark" type="line" icon="remove" tabindex="-1" class="x-small" />
     </div>
     
   </article>

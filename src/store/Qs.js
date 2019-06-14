@@ -5,22 +5,22 @@ var _ = require('lodash')
 
 const initState = () => ({
   items: [
-    {
-      id: 0,
-      title: 'Hola, soy el principio!',
-    },
-    {
-      id: 1,
-      title: 'Yo estoy en medio'
-    },
-    {
-      id: 103,
-      title: 'Yo tambien'
-    },
-    {
-      id: 2,
-      title: 'Adiós, soy el Final'
-    }
+    // {
+    //   id: 0,
+    //   title: 'Hola, soy el principio!',
+    // },
+    // {
+    //   id: 1,
+    //   title: 'Yo estoy en medio'
+    // },
+    // {
+    //   id: 103,
+    //   title: 'Yo tambien'
+    // },
+    // {
+    //   id: 2,
+    //   title: 'Adiós, soy el Final'
+    // }
   ]
 })
 
@@ -30,11 +30,11 @@ const state = initState()
 
 
 // Encontramos el siguiente ID disponible
-const nextID = items => Math.max.apply(Math, items.map(function(obj) { return obj.id + 1 }))
+const nextID = items => Math.max.apply(Math, items.map(obj => obj.id + 1))
 
 // Pregunta base!
 const qSchema = () => ({
-  id: nextID(state.items),
+  id: state.items.length > 0 ? nextID(state.items) : 0,
   title: ''
 })
 
@@ -45,7 +45,7 @@ const mutations = {
     state.items = [...s.items]
   },
   
-  // New Question: ❌
+  // New Question: ✔
 	addQuestion: (state, obj) => {
     state.items.push({...obj})
   },

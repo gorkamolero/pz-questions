@@ -1,10 +1,6 @@
 <template>
   <div class="QPreview">
-    <vue-json-pretty
-      :path="'res'"
-      :data="questions"
-      @click="handleClick">
-    </vue-json-pretty>
+    <vue-json-pretty :data="questions" />
   </div>
 </template>
 
