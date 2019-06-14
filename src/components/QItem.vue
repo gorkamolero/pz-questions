@@ -1,7 +1,8 @@
 <template>
   <article class="QItem">
     <div class="QTitle puiSpaceOut">
-      <vs-input :value="question.title" @change="onChange">{{ question.title }}</vs-input>
+      <QTextEditor :id="question.id" :content="question.title" field="title" />
+
       <vs-button @click="removeQ(question.id)"  size="small" radius color="primary" type="border" icon="remove" tabindex="-1" />
     </div>
     
@@ -10,17 +11,14 @@
 
 <script>
 import { call } from 'vuex-pathify'
+import QTextEditor from './QTextEditor'
 
 export default {
   props: ['question', 'index'],
+  components: {
+    QTextEditor
+  },
   methods: {
-    onChange ({target}) {
-      this.update({
-        id: this.question.id,
-        content: target.value
-      })
-    },
-    update: call('Qs/updateQuestion'),
     removeQ: call('Qs/removeQuestion')
   },
 }
