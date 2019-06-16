@@ -44,7 +44,7 @@ export default {
     id: Number,
 		placeholder: {
 			type: String,
-			default: 'Type here...'
+			default: 'Add your question here...'
 		},
 		content: {
 			type: String,

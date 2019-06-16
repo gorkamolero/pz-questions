@@ -1,7 +1,13 @@
 <template>
   <article class="QItem">
-    <div class="QTitle puiSpaceOut">
-      <QTextEditor :id="question.id" :content="question.title" field="title" />
+    <div class="QTitle">
+      <div class="QDetails puiSpaceOut">
+        <vs-chip v-if="question.type">
+          <vs-avatar :icon="QTypeIcon.icon"/>
+          {{ question.type }}
+        </vs-chip>
+        <QTextEditor class="QTitleEditor" :id="question.id" :content="question.title" field="title" />
+      </div>
 
       <vs-button @click="removeQ(question.id)" size="small" radius color="dark" type="line" icon="remove" tabindex="-1" class="x-small" />
     </div>
@@ -10,7 +16,7 @@
 </template>
 
 <script>
-import { call } from 'vuex-pathify'
+import { get, call } from 'vuex-pathify'
 import QTextEditor from './QTextEditor'
 
 export default {
@@ -21,6 +27,10 @@ export default {
   methods: {
     removeQ: call('Qs/removeQuestion')
   },
+  computed: {
+    QTypes: get('Qs/QTypes'),
+    QTypeIcon() { return this.QTypes.find(qtype => qtype.type === this.question.type) }
+  }
 }
 </script>
 
@@ -32,14 +42,13 @@ export default {
 		border-bottom: var(--border);
     padding: var(--space) 0;
 
-    & + &:before {
+    &:after {
       content: '';
       height: 0px;
-      width: calc(100% - var(--space-l) * 2);
+      width: calc(100% - var(--space-l));
       border-bottom: 1px solid var(--light-grey);
       position: absolute;
-      top: 0;
-      left: 50%; transform: translateX(-50%);
+      bottom: 0; left: 50%; transform: translateX(-50%);
     }
     
 
@@ -76,6 +85,14 @@ export default {
     align-items: center;
     flex: 1;
     justify-content: space-between;
+  }
+
+  .QDetails {
+    
+    display: flex;
+    align-items: center;
+
+    .QTitleEditor { margin-top: -4px; }
   }
 
   .QSorting {

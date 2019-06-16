@@ -4,6 +4,28 @@ import { make } from 'vuex-pathify'
 var _ = require('lodash')
 
 const initState = () => ({
+  QTypes: [
+		{
+			type: 'cover',
+			icon: 'camera',
+			color: '#2980B9'
+		},
+		{
+			type: 'filter',
+			icon: 'filter_list',
+			color: '#00ced1'
+		},
+		{
+			type: 'images',
+			icon: 'filter',
+			color: '#00ced1'
+		},
+		{
+			type: 'end',
+			icon: 'add_shopping_cart',
+			color: '#722f37'
+    }
+  ],
   items: [
     // {
     //   id: 0,
@@ -70,7 +92,13 @@ const mutations = {
 // Acciones
 const actions = {
 	reload: ({commit}) => commit( 'emptyState' ),
-	addQuestion: ({commit}) => commit('addQuestion', Object.assign({}, qSchema())),
+	addQuestion: ({commit}, type) => {
+    console.log(1, type)
+    commit('addQuestion', {
+      type,
+      ...qSchema()
+    })
+  },
 	removeQuestion: ({commit}, id) => commit('removeQuestion', id),
 	updateQuestion: ({commit}, { id, content }) => commit( 'updateQuestion', { id, content } ),
 	...make.actions(state),
