@@ -75,15 +75,6 @@ export default {
     padding: 0;
   }
   .vs-list { padding: 0; }
-  .con-vs-chip {
-    min-height: 18px;
-    .con-vs-avatar {
-      width: 15px;
-      height: 15px;
-      transform: scale(.9) transformY(-4px);
-      transform-origin: center left;
-    }
-  }
 
   .QNewOption {
     display: flex;
@@ -99,6 +90,10 @@ export default {
   .vs-card--header {
     padding: var(--space);
     border-bottom: 1px solid var(--light-grey)
+  }
+  .vs-avatar--text {
+    transform: translate(-50%, -50%) scale(0.9) !important;
+    &.filter { transform: translate(-50%, -50%) scale(0.75) !important; }
   }
   .splitpanes__pane { overflow: visible !important; }
 </style>

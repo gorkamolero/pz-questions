@@ -114,7 +114,20 @@ export default {
 		//transform: rotateY(50deg);
 	}
 
-  .x-small {
-    transform: scale(.75)
+  .x-small { transform: scale(.75) }
+
+  .QDetails {
+    .QTitleEditor {
+    }
+    .con-vs-chip {
+      min-width: 60px;
+      min-height: 18px;
+      .con-vs-avatar {
+        width: 15px;
+        height: 15px;
+        transform: scale(.9) transformY(-4px);
+        transform-origin: center left;
+      }
+    }
   }
 </style>
