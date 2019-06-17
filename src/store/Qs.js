@@ -26,24 +26,10 @@ const initState = () => ({
 			color: '#722f37'
     }
   ],
-  items: [
-    // {
-    //   id: 0,
-    //   title: 'Hola, soy el principio!',
-    // },
-    // {
-    //   id: 1,
-    //   title: 'Yo estoy en medio'
-    // },
-    // {
-    //   id: 103,
-    //   title: 'Yo tambien'
-    // },
-    // {
-    //   id: 2,
-    //   title: 'Adiós, soy el Final'
-    // }
-  ]
+	qList: [],
+	questions: {},
+	// oList: [],
+	// options: []
 })
 
 const state = initState()
@@ -52,54 +38,50 @@ const state = initState()
 
 
 // Encontramos el siguiente ID disponible
-const returnMax = array => Math.max.apply(Math, array.map(obj => obj.id + 1))
-const empty = items => [...items].length > 0
-const nextID = () => empty(state.items) ? returnMax(state.items) : 0
-const nextOID = () => empty(state.items) ? returnMax( state.items.map(q => q.options).flat() ) : 0
+const returnMax = array => Math.max.apply(Math, array)
+const empty = items => items.length > 0
+const nextID = array => empty(array) ? returnMax(array) + 1 : 0
+//const nextQID = () => empty(state.qList) ? returnMax(state.items) : 0
+// const nextOID = () => empty(state.items) ? returnMax( state.items.map(q => q.options).flat() ) : 0
 
 // Pregunta base!
 const qSchema = () => ({
-  id: nextID(),
 	title: '',
-	options: [opSchema()]
+	oList: []
 })
-const opSchema = () => ({
-	id: nextOID(),
-	title: ''
-})
+// const opSchema = () => ({
+// 	id: nextOID(),
+// 	title: ''
+// })
 
 // Mutaciones
 const mutations = {
 	emptyState: state => {
 		const s = initState()
-		
-		if (empty(state.items)) {
-			state.items.forEach(item => {
-				item.options.forEach(option => {
-					Object.keys(option).forEach(key => {
-						Vue.set(option, key, opSchema()[key])
-					})
-				})}
-			)
-		}
-		state.items = [...s.items]
-		//state.items.forEach((item, index) => item = s.items[index])
+		state.questions = [...s.questions]
+		state.options = [...s.options]
+		state.qList = [...s.qList]
+		state.oList = [...s.oList]
   },
   
   // New Question: ✔
-	addQuestion: (state, obj) => {
-    state.items.push({...obj})
+	addQuestion: (state, question) => {
+		const id = nextID(state.qList)
+		Vue.set(state.questions, id, question)
+		state.qList.push(id)
   },
 
   // Remove: ✔
-	removeQuestion: ({items}, id) => {
-		const whichOne = items.findIndex(q => q.id === id)
-		items.splice(whichOne, 1)
+	removeQuestion: (state, id) => {
+		Vue.delete(state.questions, id)
+		Vue.delete(state.qList, state.qList.find(q => q.id === id))
 	},
 
   // Update: ✔
-	updateQuestion: ({items}, { id, content, parent = false }) => {
-		const isParent = parent === false
+	updateQuestion: (state, { id, content, parent = false }) => {
+
+		state.questions[id]
+		Vue.set(state.questions[id], 'title', content)
 		
 		if(isParent) {
 			console.log('NO PARENT')
@@ -128,14 +110,20 @@ const mutations = {
 // Acciones
 const actions = {
 	reload: ({commit}) => commit( 'emptyState' ),
-	addQuestion: ({commit}, type) => commit('addQuestion', { type, ...qSchema() }),
+	addQuestion: ({commit}, type) => {
+		debugger
+		commit('addQuestion', { type, title: '', oList: [] })
+	},
 	removeQuestion: ({commit}, id) => commit('removeQuestion', id),
 	updateQuestion: ({commit}, payload) => commit( 'updateQuestion', payload ),
 	updateOption: ({commit}, { qId, id, content }) => commit('updateOption', { qId, id, content }),
 	...make.actions(state),
 }
 
-const getters = make.getters(state)
+const getters = {
+	qSet: state => state.qList.map( id => state.questions[id] ),
+	...make.getters(state)
+}
 
 export default scaffoldStore({
 	state,

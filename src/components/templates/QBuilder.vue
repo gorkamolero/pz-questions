@@ -36,7 +36,7 @@ export default {
   mounted() {
   },
   computed: {
-    Qs: get('Qs/items'),
+    Qs: get('Qs/qSet'),
   }
 }
 </script>

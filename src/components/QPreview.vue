@@ -13,7 +13,7 @@ export default {
     VueJsonPretty
   },
   computed: {
-    questions: get('Qs/items')
+    questions: get('Qs/qSet')
   }
 }
 </script>

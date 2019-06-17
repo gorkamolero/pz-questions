@@ -15,7 +15,15 @@
       <vs-button @click="removeQ(question.id)" size="small" radius color="dark" type="line" icon="remove" tabindex="-1" class="x-small" />
     </div>
 
-    <div class="QOptions">
+    
+    
+  </article>
+</template>
+
+<script>
+/*
+
+<div class="QOptions">
         <div class="QOption puiSpaceOut" v-for="(option, i) in question.options" :key="i">
           <small class="id">Q{{ index }}.{{ i }}</small>
           <span> - </span>
@@ -26,11 +34,7 @@
             :content="option.title" />
         </div>
       </div>
-    
-  </article>
-</template>
-
-<script>
+*/
 import { get, call } from 'vuex-pathify'
 import QTextEditor from './QTextEditor'
 
