@@ -52,19 +52,38 @@ const state = initState()
 
 
 // Encontramos el siguiente ID disponible
-const nextID = items => Math.max.apply(Math, items.map(obj => obj.id + 1))
+const returnMax = array => Math.max.apply(Math, array.map(obj => obj.id + 1))
+const empty = items => [...items].length > 0
+const nextID = () => empty(state.items) ? returnMax(state.items) : 0
+const nextOID = () => empty(state.items) ? returnMax( state.items.map(q => q.options).flat() ) : 0
 
 // Pregunta base!
 const qSchema = () => ({
-  id: state.items.length > 0 ? nextID(state.items) : 0,
-  title: ''
+  id: nextID(),
+	title: '',
+	options: [opSchema()]
+})
+const opSchema = () => ({
+	id: nextOID(),
+	title: ''
 })
 
 // Mutaciones
 const mutations = {
 	emptyState: state => {
-    const s = initState()
-    state.items = [...s.items]
+		const s = initState()
+		
+		if (empty(state.items)) {
+			state.items.forEach(item => {
+				item.options.forEach(option => {
+					Object.keys(option).forEach(key => {
+						Vue.set(option, key, opSchema()[key])
+					})
+				})}
+			)
+		}
+		state.items = [...s.items]
+		//state.items.forEach((item, index) => item = s.items[index])
   },
   
   // New Question: ✔
@@ -79,9 +98,26 @@ const mutations = {
 	},
 
   // Update: ✔
-	updateQuestion: ({items}, { id, content }) => {
-    const index = items.findIndex(q => q.id === id)
-		Vue.set(items[index], 'title', content)
+	updateQuestion: ({items}, { id, content, parent = false }) => {
+		const isParent = parent === false
+		
+		if(isParent) {
+			console.log('NO PARENT')
+			const qIndex = items.findIndex(q => q.id === id )
+			Vue.set(items[qIndex], 'title', content)
+		} else {
+			console.log('YES PARENT', parent)
+			const qIndex = items.length > 1 ? items.findIndex(q => q.id === parent ) : 0
+			const oIndex = items[qIndex].options > 1 ? items[qIndex].options.findIndex(o => o.id === id) : 0
+			
+			console.log( 111,  items[qIndex].options[oIndex] )
+			Vue.set(items[qIndex].options[oIndex], 'title', content)
+		}
+	},
+
+	// Update option
+	update: ({items}, { id, content }) => {
+		//const
 	},
 
 	...make.mutations(state),
@@ -92,15 +128,10 @@ const mutations = {
 // Acciones
 const actions = {
 	reload: ({commit}) => commit( 'emptyState' ),
-	addQuestion: ({commit}, type) => {
-    console.log(1, type)
-    commit('addQuestion', {
-      type,
-      ...qSchema()
-    })
-  },
+	addQuestion: ({commit}, type) => commit('addQuestion', { type, ...qSchema() }),
 	removeQuestion: ({commit}, id) => commit('removeQuestion', id),
-	updateQuestion: ({commit}, { id, content }) => commit( 'updateQuestion', { id, content } ),
+	updateQuestion: ({commit}, payload) => commit( 'updateQuestion', payload ),
+	updateOption: ({commit}, { qId, id, content }) => commit('updateOption', { qId, id, content }),
 	...make.actions(state),
 }
 

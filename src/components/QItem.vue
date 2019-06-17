@@ -1,16 +1,31 @@
 <template>
   <article class="QItem">
-    <div class="QTitle">
-      <div class="QDetails puiSpaceOut">
+    <div class="QItemTitle">
+      <div class="QItemTitleDetails puiSpaceOut">
         <vs-chip v-if="question.type">
           <vs-avatar :icon="QTypeIcon.icon"/>
           {{ question.type }}
         </vs-chip>
-        <QTextEditor class="QTitleEditor" :id="question.id" :content="question.title" field="title" />
+        <QTextEditor
+          class="QTitleEditor"
+          :id="question.id"
+          :content="question.title"
+          field="title" />
       </div>
-
       <vs-button @click="removeQ(question.id)" size="small" radius color="dark" type="line" icon="remove" tabindex="-1" class="x-small" />
     </div>
+
+    <div class="QOptions">
+        <div class="QOption puiSpaceOut" v-for="(option, i) in question.options" :key="i">
+          <small class="id">Q{{ index }}.{{ i }}</small>
+          <span> - </span>
+          <QTextEditor
+            class="QOptionEditor"
+            :parent="question.id"
+            :id="option.id"
+            :content="option.title" />
+        </div>
+      </div>
     
   </article>
 </template>
@@ -37,7 +52,6 @@ export default {
 <style lang="scss">
   .QItem {
     position: relative;
-    display: flex;
     user-select: none;
 		border-bottom: var(--border);
     padding: var(--space) 0;
@@ -80,19 +94,28 @@ export default {
     }
   }
 
-  .QTitle {
+  .QItemTitle {
     display: flex;
     align-items: center;
     flex: 1;
     justify-content: space-between;
   }
 
-  .QDetails {
-    
+  .QItemTitleDetails {
     display: flex;
     align-items: center;
 
     .QTitleEditor { margin-top: -4px; }
+    .con-vs-chip {
+      min-width: 60px;
+      min-height: 18px;
+      .con-vs-avatar {
+        width: 15px;
+        height: 15px;
+        transform: scale(.9) transformY(-4px);
+        transform-origin: center left;
+      }
+    }
   }
 
   .QSorting {
@@ -116,18 +139,10 @@ export default {
 
   .x-small { transform: scale(.75) }
 
-  .QDetails {
-    .QTitleEditor {
-    }
-    .con-vs-chip {
-      min-width: 60px;
-      min-height: 18px;
-      .con-vs-avatar {
-        width: 15px;
-        height: 15px;
-        transform: scale(.9) transformY(-4px);
-        transform-origin: center left;
-      }
-    }
+  .QOption {
+    display: flex;
+    align-items: baseline;  
+    small { opacity: .5; }
+    padding: var(--space-s);
   }
 </style>

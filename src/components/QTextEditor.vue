@@ -42,6 +42,11 @@ export default {
   },
 	props: {
     id: Number,
+    parent: {
+      type: [Boolean, Number],
+      default: false,
+    },
+		field: String,
 		placeholder: {
 			type: String,
 			default: 'Add your question here...'
@@ -54,7 +59,6 @@ export default {
 			type: Boolean,
 			default: false
 		},
-		field: String
   },
   watch: {
     content () {
@@ -86,14 +90,17 @@ export default {
 				],
 				onUpdate: ({ getJSON, getHTML}) => {
 					// Clear timeout each time a key is pressed
-					clearTimeout(this.timeout)
+          clearTimeout(this.timeout)
+
+          const updateObj = {
+            id: this.id,
+            content: getHTML(),
+          }
+          if (this.parent !== false) { updateObj.parent = this.parent }
 					
 					// Wait half a second without input before running update
-					this.timeout = setTimeout(() => {            
-            this.update({
-              id: this.id,
-              content: getHTML()
-            })
+					this.timeout = setTimeout(() => {
+            this.update(updateObj)
 					}, 1500)
 				},
       })
@@ -102,9 +109,6 @@ export default {
   beforeDestroy() {
     this.editor.destroy()
 	},
-  updated() {
-    console.log('HI')
-  },
 }
 </script>
 
