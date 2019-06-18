@@ -1,0 +1,44 @@
+if(state.items.length > initState.items.length) {
+    
+    state.items.forEach((stateItem, index) => {
+      
+      if(!initState.items.find(initItem => initItem.id === stateItem.id)) {
+        console.log( `Deleting item => ${stateItem.id}: ${stateItem.title}` )
+        
+        store.commit('Qs/removeQuestion', stateItem.id)
+      }
+    
+    })
+  
+  }
+
+  else {
+
+  }
+
+  /*  
+  state.items.forEach((item, i) => {
+    // Copia fresca del array
+    //const freezedStateItems = [...state.items]
+    
+    if(!items.find(q => q.id === item.id)) {
+      const index = state.items.findIndex(q => q.id === item.id)
+      
+      console.log('IM HERE', i)
+      Vue.delete(state.items, index)
+    }
+  }) */
+
+  
+  initState.items.forEach((question, index) => {
+    // If there is no element, we create
+    if(!state.items[index]){
+      state.items.splice(index, 0, {...question})
+    }
+    // Otherwise, we just set it up
+    else {
+      Vue.set(state.items, index, {...question})
+    }
+  })
+
+  //PROBAR items.splice(state.items.length)

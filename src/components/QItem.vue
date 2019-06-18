@@ -1,38 +1,71 @@
 <template>
   <article class="QItem">
-    <div class="QTitle puiSpaceOut">
-      <vs-input :value="question.title" @change="onChange">{{ question.title }}</vs-input>
-      <vs-button @click="removeQ(question.id)"  size="small" radius color="primary" type="border" icon="remove" tabindex="-1" />
-    </div>
-    
+    <div class="QItemTitle">
+      <div class="QItemTitleDetails puiSpaceOut">
+        <vs-chip v-if="question.type">
+          <vs-avatar :icon="QTypeIcon.icon"/>
+          {{ question.type }}
+        </vs-chip>
+        <QTextEditor
+          class="QTitleEditor"
+          :id="question.id"
+          :content="question.title"
+          type="questions"
+          field="title" />
+      </div>
+      <vs-button @click="removeQ(question.id)" size="small" radius color="dark" type="line" icon="remove" tabindex="-1" class="x-small" />
+    </div>    
   </article>
 </template>
 
 <script>
-import { call } from 'vuex-pathify'
+/*
+
+<div class="QOptions">
+        <div class="QOption puiSpaceOut" v-for="(option, i) in question.options" :key="i">
+          <small class="id">Q{{ index }}.{{ i }}</small>
+          <span> - </span>
+          <QTextEditor
+            class="QOptionEditor"
+            :parent="question.id"
+            :id="option.id"
+            :content="option.title" />
+        </div>
+      </div>
+*/
+import { get, call } from 'vuex-pathify'
+import QTextEditor from './QTextEditor'
 
 export default {
   props: ['question', 'index'],
+  components: {
+    QTextEditor
+  },
   methods: {
-    onChange ({target}) {
-      this.update({
-        id: this.question.id,
-        content: target.value
-      })
-    },
-    update: call('Qs/updateQuestion'),
     removeQ: call('Qs/removeQuestion')
   },
+  computed: {
+    QTypes: get('Qs/QTypes'),
+    QTypeIcon() { return this.QTypes.find(qtype => qtype.type === this.question.type) }
+  }
 }
 </script>
 
 <style lang="scss">
   .QItem {
     position: relative;
-    display: flex;
     user-select: none;
 		border-bottom: var(--border);
-    padding: var(--space-s) 0;
+    padding: var(--space) 0;
+
+    &:after {
+      content: '';
+      height: 0px;
+      width: calc(100% - var(--space-l));
+      border-bottom: 1px solid var(--light-grey);
+      position: absolute;
+      bottom: 0; left: 50%; transform: translateX(-50%);
+    }
     
 
     &Inner { padding: var(--spacing) 0; }
@@ -63,9 +96,28 @@ export default {
     }
   }
 
-  .QTitle {
+  .QItemTitle {
     display: flex;
     align-items: center;
+    flex: 1;
+    justify-content: space-between;
+  }
+
+  .QItemTitleDetails {
+    display: flex;
+    align-items: center;
+
+    .QTitleEditor { margin-top: -4px; }
+    .con-vs-chip {
+      min-width: 60px;
+      min-height: 18px;
+      .con-vs-avatar {
+        width: 15px;
+        height: 15px;
+        transform: scale(.9) transformY(-4px);
+        transform-origin: center left;
+      }
+    }
   }
 
   .QSorting {
@@ -86,4 +138,13 @@ export default {
 	.QItemSorting {
 		//transform: rotateY(50deg);
 	}
+
+  .x-small { transform: scale(.75) }
+
+  .QOption {
+    display: flex;
+    align-items: baseline;  
+    small { opacity: .5; }
+    padding: var(--space-s);
+  }
 </style>

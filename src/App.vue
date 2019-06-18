@@ -1,18 +1,16 @@
 <template>
   <PZBoiler id="app">
-    <div class="Container">
-      <QBuilder />
-    </div>
-    <div class="Container">
-      <QPreview />
-    </div>
+    <router-view />
   </PZBoiler>
 </template>
 
 <script>
+import './tempstyles.scss'
 import 'material-icons/iconfont/material-icons.css'
+// TODO: put in boiler
+import './utils/filters'
 import PZBoiler from '@bit/pickzen.pui.core.pz-boiler/PZBoiler'
-import QBuilder from './components/QBuilder'
+import QBuilder from './components/templates/QBuilder'
 import QPreview from './components/QPreview'
 
 export default {
@@ -28,6 +26,8 @@ export default {
 <style lang="scss">
 #app {
   display: flex;
+  height: 100%;
+  border: var(--space-l) solid whitesmoke;
 }
 .Container {
   width: calc(100vw / 3);

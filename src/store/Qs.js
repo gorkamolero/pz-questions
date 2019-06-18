@@ -1,88 +1,128 @@
 import Vue from 'vue'
 import { scaffoldStore } from 'undo-redo-vuex'
 import { make } from 'vuex-pathify'
+import { deleteProp } from '@/utils/methods'
 
-/* const itemsSchema = {
-	id,
-	type,
-	title,
-	subtitle,
-	extratitle,
-	img,
-	layout,
-	options: []
-} */
-
-const qSchema = {
-	id: '',
-	type: '',
-	title: ''
-}
-
-const initQs = [
-  {
-    id: 0,
-    title: 'Hola, soy el principio!',
-  },
-  {
-    id: 1,
-    title: 'Yo estoy en medio'
-  },
-  {
-    id: 2,
-    title: 'Yo tambien'
-  },
-  {
-    id: 3,
-    title: 'Adiós, soy el Final'
-  }
-]
-
-const getDefaultState = () => ({
-  items: [...initQs]
+const initState = () => ({
+  QTypes: [
+		{
+			type: 'cover',
+			icon: 'camera',
+			color: '#2980B9'
+		},
+		{
+			type: 'filter',
+			icon: 'filter_list',
+			color: '#00ced1'
+		},
+		{
+			type: 'images',
+			icon: 'filter',
+			color: '#00ced1'
+		},
+		{
+			type: 'end',
+			icon: 'add_shopping_cart',
+			color: '#722f37'
+    }
+  ],
+	qList: [],
+	questions: {},
+	options: {}
 })
+window.initState = initState()
 
-let state = getDefaultState()
+const state = initState()
 
-initQs.forEach((question, index) => {
-  state.items[index] = { ...question }
+window.state = state
+
+
+
+
+// Encontramos el siguiente ID disponible
+const returnMax = array => Math.max.apply(Math, array)
+const empty = items => items.length > 0
+const nextID = array => empty(array) ? returnMax(array) + 1 : 0
+
+// Pregunta base!
+const qSchema = () => ({
+	title: '',
+	oList: []
 })
+// const opSchema = () => ({
+// 	id: nextOID(),
+// 	title: ''
+// })
 
-const actions = {
-	reload: ({commit}) => commit( 'emptyState' ),
-	addQuestion: ({commit}) => commit('addQuestion', ''),
-	removeQuestion: ({commit}, id) => commit('removeQuestion', id),
-	updateQuestion: ({commit}, { id, content }) => commit( 'updateQuestion', { id, content } ),
-	...make.actions(state),
-}
-
+// Mutaciones
 const mutations = {
-	emptyState: (state) => {
-    //state.items = [...initQs]
-    
-    initQs.forEach((question, index) => {
-      Object.entries(question).forEach(([key, value]) => {
-        Vue.set(state.items[index], key, value)
-      })
-    })
-	},
-	// Set items and so on	
-	addQuestion: (state, question) => state.items.push(question),
-	removeQuestion: ({items}, id) => {
-		const whichOne = items.findIndex(q => q.id === id)
-		items.splice(whichOne, 1)
+	emptyState: state => {
+		const s = initState()
+		// const s = Object.assign({}, initState)
+
+		state.questions = { ...s.questions }
+		//Vue.set(state, 'questions', { ...s.questions })
+		state.options = {}
+		state.qList = []
+  },
+  
+  // New Question: ✔
+	addQuestion: (state, type) => {
+		const q = {...qSchema(), type},
+					id = nextID(state.qList)
+		
+		Vue.set(state.questions, id, q)
+		state.qList.push(id)
+  },
+
+  // Remove: ✔
+	removeQuestion: ({questions, qList}, id) => {
+		Vue.delete(questions, id)
+		Vue.delete(qList, qList.findIndex(q => q === id))
 	},
 
-	updateQuestion: ({items}, { id, content }) => {
-    const index = items.findIndex(q => q.id === id)
-    console.log(index)
-		Vue.set(items[index], 'title', content)
+	// Update: ✔
+	update: (state, { id, field, type, content }) => {
+		Vue.set(state[type][id], field, content)
 	},
+	
+	/* updateQuestion: (state, { id, content, parent = false }) => {
+
+		state.questions[id]
+		Vue.set(state.questions[id], 'title', content)
+		
+		if(isParent) {
+			console.log('NO PARENT')
+			const qIndex = items.findIndex(q => q.id === id )
+			Vue.set(items[qIndex], 'title', content)
+		} else {
+			console.log('YES PARENT', parent)
+			const qIndex = items.length > 1 ? items.findIndex(q => q.id === parent ) : 0
+			const oIndex = items[qIndex].options > 1 ? items[qIndex].options.findIndex(o => o.id === id) : 0
+			
+			console.log( 111,  items[qIndex].options[oIndex] )
+			Vue.set(items[qIndex].options[oIndex], 'title', content)
+		}
+	}, */
 
 	...make.mutations(state),
 }
 
-const getters = make.getters(state)
+
+
+// Acciones
+const actions = {
+	reload: ({commit}) => commit( 'emptyState' ),
+	addQuestion: ({commit}, type) => commit('addQuestion', type),
+	removeQuestion: ({commit}, id) => commit('removeQuestion', id),
+	update: ({commit}, payload) => commit( 'update', payload ),
+	...make.actions(state),
+}
+
+const getters = {
+	qSet: state => state.qList.map(id => ({id, ...state.questions[id] })),
+	...make.getters(state)
+}
 
 export default scaffoldStore({
 	state,
@@ -93,3 +133,20 @@ export default scaffoldStore({
 })
 
 
+
+
+
+
+
+
+// Pregunta final
+/* const itemsSchema = {
+	id,
+	type,
+	title,
+	subtitle,
+	extratitle,
+	img,
+	layout,
+	options: []
+} */

@@ -1,7 +1,9 @@
 <template>
 	<nav class="QActions puiSpaceOut">
-    <vs-button size="small"  @click.native="addQ"
+    <QNew>
+      <vs-button size="small"
         radius color="danger" type="gradient" icon="add" />
+    </QNew>
     <vs-button size="small" :disabled="!canUndo" @click="undo"
         radius color="danger" type="gradient" icon="undo" />
     <vs-button size="small" :disabled="!canRedo" @click="redo"
@@ -12,16 +14,19 @@
 </template>
 
 <script>
+import QNew from '@/components/elements/QNew'
 import { get, call } from 'vuex-pathify'
 
 export default {
+  components: {
+    QNew
+  },
 	computed: {
     canUndo: get('Qs/canUndo'),
     canRedo: get('Qs/canRedo')
 	},
   methods: {
     reload: call('Qs/reload'),
-    addQ: call('Qs/addQuestion'),
     undo: call('Qs/undo'),
 		redo: call('Qs/redo')
   },
