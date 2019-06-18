@@ -42,11 +42,8 @@ export default {
   },
 	props: {
     id: Number,
-    parent: {
-      type: [Boolean, Number],
-      default: false,
-    },
-		field: String,
+    field: String,
+    type: String,
 		placeholder: {
 			type: String,
 			default: 'Add your question here...'
@@ -67,7 +64,7 @@ export default {
     }
   },
   methods: {
-    update: call('Qs/updateQuestion'),
+    update: call('Qs/update'),
   },
   data() {
     return {
@@ -95,8 +92,8 @@ export default {
           const updateObj = {
             id: this.id,
             field: this.field,
+            type: this.type,
             content: getHTML(),
-            parent: this.parent
           }
 					
 					// Wait half a second without input before running update

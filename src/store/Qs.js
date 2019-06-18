@@ -34,6 +34,8 @@ window.initState = initState()
 
 const state = initState()
 
+window.state = state
+
 
 
 
@@ -41,8 +43,6 @@ const state = initState()
 const returnMax = array => Math.max.apply(Math, array)
 const empty = items => items.length > 0
 const nextID = array => empty(array) ? returnMax(array) + 1 : 0
-//const nextQID = () => empty(state.qList) ? returnMax(state.items) : 0
-// const nextOID = () => empty(state.items) ? returnMax( state.items.map(q => q.options).flat() ) : 0
 
 // Pregunta base!
 const qSchema = () => ({
@@ -58,31 +58,34 @@ const qSchema = () => ({
 const mutations = {
 	emptyState: state => {
 		const s = initState()
+		// const s = Object.assign({}, initState)
 
 		state.questions = { ...s.questions }
-		state.options = { ...s.options }
-		state.qList = [ ...s.qList ]
+		//Vue.set(state, 'questions', { ...s.questions })
+		state.options = {}
+		state.qList = []
   },
   
   // New Question: ✔
-	addQuestion: (state, question) => {
-		const id = nextID(state.qList)
-		Vue.set(state.questions, id, question)
+	addQuestion: (state, type) => {
+		const q = {...qSchema(), type},
+					id = nextID(state.qList)
+		
+		Vue.set(state.questions, id, q)
 		state.qList.push(id)
   },
 
   // Remove: ✔
-	removeQuestion: (state, id) => {
-		Vue.delete(state.questions, id)
-		Vue.delete(state.qList, state.qList.findIndex(q => q === id))
+	removeQuestion: ({questions, qList}, id) => {
+		Vue.delete(questions, id)
+		Vue.delete(qList, qList.findIndex(q => q === id))
 	},
 
 	// Update: ✔
-	updateQuestion: (state, { id, parent, field, content }) => {
-		if(parent === false) {
-			Vue.set(state.questions[id], field, content)
-		}
+	update: (state, { id, field, type, content }) => {
+		Vue.set(state[type][id], field, content)
 	},
+	
 	/* updateQuestion: (state, { id, content, parent = false }) => {
 
 		state.questions[id]
@@ -102,11 +105,6 @@ const mutations = {
 		}
 	}, */
 
-	// Update option
-	update: ({items}, { id, content }) => {
-		//const
-	},
-
 	...make.mutations(state),
 }
 
@@ -115,10 +113,12 @@ const mutations = {
 // Acciones
 const actions = {
 	reload: ({commit}) => commit( 'emptyState' ),
-	addQuestion: ({commit}, type) => commit('addQuestion', { type, title: '', oList: [] }),
+	addQuestion: ({commit}, type) => commit('addQuestion', type),
 	removeQuestion: ({commit}, id) => commit('removeQuestion', id),
-	updateQuestion: ({commit}, payload) => commit( 'updateQuestion', payload ),
-	updateOption: ({commit}, { qId, id, content }) => commit('updateOption', { qId, id, content }),
+	update: ({commit}, payload) => {
+		//commit( 'empty', payload)
+		commit( 'update', payload )
+	},
 	...make.actions(state),
 }
 

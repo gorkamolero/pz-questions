@@ -10,13 +10,11 @@
           class="QTitleEditor"
           :id="question.id"
           :content="question.title"
+          type="questions"
           field="title" />
       </div>
       <vs-button @click="removeQ(question.id)" size="small" radius color="dark" type="line" icon="remove" tabindex="-1" class="x-small" />
-    </div>
-
-    
-    
+    </div>    
   </article>
 </template>
 

@@ -29,7 +29,8 @@ export default new Vuex.Store({
           namespace: 'simple'
         },
         {
-          namespace: 'Qs'
+          namespace: 'Qs',
+          ignoreMutations: ['empty']
         }
       ]
     })
