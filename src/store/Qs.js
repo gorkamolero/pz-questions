@@ -58,15 +58,8 @@ const qSchema = () => ({
 const mutations = {
 	emptyState: state => {
 		const s = initState()
-		Object.keys(state.questions).forEach(question => {
-			Object.keys(question).forEach(key => {
-				Object.keys(s.questions).forEach(sQ => {
-					question[key] = sQ[key]
-				})
-			})
-		})
-		//Object.keys(state.questions).forEach(key => Vue.set(state.questions, key, s[key]))
-		//state.questions = { ...s.questions }
+
+		state.questions = { ...s.questions }
 		state.options = { ...s.options }
 		state.qList = [ ...s.qList ]
   },
@@ -80,7 +73,6 @@ const mutations = {
 
   // Remove: ✔
 	removeQuestion: (state, id) => {
-		console.log(4, state, id)
 		Vue.delete(state.questions, id)
 		Vue.delete(state.qList, state.qList.findIndex(q => q === id))
 	},
