@@ -1,5 +1,7 @@
 <template>
   <div class="QNew">
+    <QSkeleton v-if="skeleton" />
+
     <v-menu
       class="newQMenu"
       absolute top
@@ -7,7 +9,7 @@
       min-width="260"
     >
       <template v-slot:activator="{ on }">
-        <div v-on="on">
+        <div v-on="on" @click="setSkeleton">
           <slot />
         </div>
       </template>
@@ -37,18 +39,23 @@
 <script>
 import { get, call } from 'vuex-pathify'
 import '@/plugins/vuetify'
-import { VMenu } from 'vuetify/lib'
+import QSkeleton from '@/components/elements/QSkeleton'
 
 
 export default {
+  data: () => ({
+    skeleton: false
+  }),
   components: {
-    VMenu
+    QSkeleton
   },
   methods: {
     addQuestion: call('Qs/addQuestion'),
     addNewQ(type) {
+      this.skeleton = false
       this.addQuestion(type)
-    }
+    },
+    setSkeleton () { this.skeleton = !this.skeleton }
   },
   computed: {
     QTypes: get('Qs/QTypes')

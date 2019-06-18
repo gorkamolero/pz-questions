@@ -27,6 +27,7 @@ import QItem from '@/components/QItem'
 import QNew from '@/components/elements/QNew'
 import QActions from '@/components/QActions'
 
+
 export default {
   components: {
     QList, QItem, QNew, QActions
