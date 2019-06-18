@@ -94,14 +94,15 @@ export default {
 
           const updateObj = {
             id: this.id,
+            field: this.field,
             content: getHTML(),
+            parent: this.parent
           }
-          if (this.parent !== false) { updateObj.parent = this.parent }
 					
 					// Wait half a second without input before running update
 					this.timeout = setTimeout(() => {
             this.update(updateObj)
-					}, 1500)
+					}, 1000)
 				},
       })
     }

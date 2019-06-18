@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import { scaffoldStore } from 'undo-redo-vuex'
 import { make } from 'vuex-pathify'
-var _ = require('lodash')
+import { deleteProp } from '@/utils/methods'
 
 const initState = () => ({
   QTypes: [
@@ -28,9 +28,9 @@ const initState = () => ({
   ],
 	qList: [],
 	questions: {},
-	// oList: [],
-	// options: []
+	options: {}
 })
+window.initState = initState()
 
 const state = initState()
 
@@ -58,10 +58,17 @@ const qSchema = () => ({
 const mutations = {
 	emptyState: state => {
 		const s = initState()
-		state.questions = [...s.questions]
-		state.options = [...s.options]
-		state.qList = [...s.qList]
-		state.oList = [...s.oList]
+		Object.keys(state.questions).forEach(question => {
+			Object.keys(question).forEach(key => {
+				Object.keys(s.questions).forEach(sQ => {
+					question[key] = sQ[key]
+				})
+			})
+		})
+		//Object.keys(state.questions).forEach(key => Vue.set(state.questions, key, s[key]))
+		//state.questions = { ...s.questions }
+		state.options = { ...s.options }
+		state.qList = [ ...s.qList ]
   },
   
   // New Question: ✔
@@ -73,12 +80,18 @@ const mutations = {
 
   // Remove: ✔
 	removeQuestion: (state, id) => {
+		console.log(4, state, id)
 		Vue.delete(state.questions, id)
-		Vue.delete(state.qList, state.qList.find(q => q.id === id))
+		Vue.delete(state.qList, state.qList.findIndex(q => q === id))
 	},
 
-  // Update: ✔
-	updateQuestion: (state, { id, content, parent = false }) => {
+	// Update: ✔
+	updateQuestion: (state, { id, parent, field, content }) => {
+		if(parent === false) {
+			Vue.set(state.questions[id], field, content)
+		}
+	},
+	/* updateQuestion: (state, { id, content, parent = false }) => {
 
 		state.questions[id]
 		Vue.set(state.questions[id], 'title', content)
@@ -95,7 +108,7 @@ const mutations = {
 			console.log( 111,  items[qIndex].options[oIndex] )
 			Vue.set(items[qIndex].options[oIndex], 'title', content)
 		}
-	},
+	}, */
 
 	// Update option
 	update: ({items}, { id, content }) => {
@@ -110,10 +123,7 @@ const mutations = {
 // Acciones
 const actions = {
 	reload: ({commit}) => commit( 'emptyState' ),
-	addQuestion: ({commit}, type) => {
-		debugger
-		commit('addQuestion', { type, title: '', oList: [] })
-	},
+	addQuestion: ({commit}, type) => commit('addQuestion', { type, title: '', oList: [] }),
 	removeQuestion: ({commit}, id) => commit('removeQuestion', id),
 	updateQuestion: ({commit}, payload) => commit( 'updateQuestion', payload ),
 	updateOption: ({commit}, { qId, id, content }) => commit('updateOption', { qId, id, content }),
@@ -121,7 +131,7 @@ const actions = {
 }
 
 const getters = {
-	qSet: state => state.qList.map( id => state.questions[id] ),
+	qSet: state => state.qList.map(id => ({id, ...state.questions[id] })),
 	...make.getters(state)
 }
 
