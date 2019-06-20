@@ -9,11 +9,7 @@ import PZBoiler from '@/components/core/PZBoiler'
 
 export default {
   name: 'app',
-  components: {
-    PZBoiler,
-    QBuilder,
-    QPreview
-  }
+  components: { PZBoiler }
 }
 </script>
 

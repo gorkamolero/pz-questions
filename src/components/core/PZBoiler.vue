@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import Styles from '@bit/pickzen.pui.core.styles/Styles.vue'
+import Styles from '@/components/core/styles/Styles'
 import FontLoader from '@bit/pickzen.pui.core.font-loader/FontLoader.vue'
 import 'material-icons/iconfont/material-icons.css'
 import VuesaxLoader from '@bit/pickzen.pui.core.vuesax-loader/VuesaxLoader.vue'
