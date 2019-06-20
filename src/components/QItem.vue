@@ -11,42 +11,59 @@
           :id="question.id"
           :content="question.title"
           type="questions"
-          field="title" />
+          field="title"
+          @changeFocus="changeFocus" />
       </div>
       <vs-button @click="removeQ(question.id)" size="small" radius color="dark" type="line" icon="remove" tabindex="-1" class="x-small" />
-    </div>    
+    </div>
+    <div class="QOptions">
+      <div class="QOption puiSpaceOut" v-for="(option, i) in qOptions" :key="i">
+        <small class="id">Q{{ index }}.{{ i }}</small>
+        <span> - </span>
+        <QTextEditor
+          class="QOptionEditor"
+          type="options"
+          field="title"
+          :focus="focus === option.id"
+          :parent="question.id"
+          :id="option.id"
+          :content="option.title"
+          :isNotFirst="i !== 0"/>
+      </div>
+    </div>
   </article>
 </template>
 
 <script>
-/*
-
-<div class="QOptions">
-        <div class="QOption puiSpaceOut" v-for="(option, i) in question.options" :key="i">
-          <small class="id">Q{{ index }}.{{ i }}</small>
-          <span> - </span>
-          <QTextEditor
-            class="QOptionEditor"
-            :parent="question.id"
-            :id="option.id"
-            :content="option.title" />
-        </div>
-      </div>
-*/
 import { get, call } from 'vuex-pathify'
 import QTextEditor from './QTextEditor'
 
 export default {
   props: ['question', 'index'],
+  data: () => ({
+    focus: 0,
+  }),
   components: {
     QTextEditor
   },
   methods: {
-    removeQ: call('Qs/removeQuestion')
+    removeQ: call('Qs/removeQuestion'),
+    changeFocus(where) {
+      console.log('HERE: ', where, this.question.oList)
+      if(where === 'options') this.setFocus(this.question.oList[0])
+      else if(where === 'next') this.setFocus(this.focus + 1)
+      else if(where === 'prev') this.setFocus(this.focus - 1)
+      else this.setFocus(where)
+    },
+    setFocus(num) {
+      this.focus = num
+    }
   },
   computed: {
     QTypes: get('Qs/QTypes'),
-    QTypeIcon() { return this.QTypes.find(qtype => qtype.type === this.question.type) }
+    QTypeIcon() { return this.QTypes.find(qtype => qtype.type === this.question.type) },
+    options: get('Qs/options'),
+    qOptions() { return this.question.oList.map(id => ({ ...this.options[id], id })) }
   }
 }
 </script>

@@ -1,5 +1,9 @@
 <template>
-  <div class="editor">
+  <div class="editor"
+    @keyup.enter="onEnter"
+    @keyup.tab="onTab"
+    @keyup.delete="onDelete">
+
     <editor-menu-bubble :editor="editor" :keep-in-bounds="keepInBounds" v-slot="{ commands, isActive, menu }">
       <div
         class="menububble"
@@ -31,6 +35,7 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 import { call } from 'vuex-pathify'
 import { Editor, EditorContent, EditorMenuBubble, Extension } from 'tiptap'
 import { BulletList, ListItem, Placeholder, Bold, Italic, Link, } from 'tiptap-extensions'
@@ -44,6 +49,9 @@ export default {
     id: Number,
     field: String,
     type: String,
+    focus: Boolean,
+    isNotFirst: Boolean,
+    parent: Number,
 		placeholder: {
 			type: String,
 			default: 'Add your question here...'
@@ -61,49 +69,96 @@ export default {
     content () {
       if (this.content === this.editor.getHTML()) return
       this.editor.setContent(this.content)
-    }
+    },
+    focus() { this.focus && this.editor.focus('end') },
+  },
+  mounted() {
+    if (this.editor) this.editor.destroy()
+    this.editor = new Editor({
+      autoFocus: this.isQuestion || this.isNotFirst,
+      content: this.content,
+      extensions: [
+        new BulletList(),
+        new ListItem(),
+        new Placeholder({
+          emptyClass: 'is-empty',
+          emptyNodeText: this.placeholder,
+          showOnlyWhenEditable: true,
+        }),
+        new Italic(),
+        new Bold(),
+        new class extends Extension {
+          keys () {
+            return {
+              Enter (state, dispatch, view) {
+                return true
+              }
+            }
+          }
+        }(this),
+      ],
+      onUpdate: ({ getJSON, getHTML}) => {
+        // Clear timeout each time a key is pressed
+        clearTimeout(this.timeout)
+
+        const updateObj = {
+          id: this.id,
+          field: this.field,
+          type: this.type,
+          content: getHTML(),
+        }
+        
+        // Wait half a second without input before running update
+        this.timeout = setTimeout(() => {
+          this.update(updateObj)
+        }, 500)
+      },
+      onFocus: () => {
+        console.log(this)
+        this.isFocused = true
+        this.$emit('changeFocus', this.id)
+      },
+      onBlur() { this.isFocused = false }
+    })
   },
   methods: {
+    addOption: call('Qs/addOption'),
     update: call('Qs/update'),
+    ...mapMutations({
+      removeOption: 'Qs/removeOption'
+    }),
+    onTab() {
+      this.isFocused || this.editor.focus('end')
+    },
+    onEnter() {
+      // If key comes from an option
+      if(this.isOption) {
+        this.addOption({ qID: this.parent})
+        this.$emit('changeFocus', 'next')
+      }
+      else this.$emit('changeFocus', 'options')
+    },
+    onDelete() {
+      if (this.isOption && this.isEmpty) {
+        if(!this.hasBeenEmptied) this.hasBeenEmptied = true
+        else this.removeOption({ oID: this.id, qID: this.parent })
+        this.$emit('changeFocus', 'prev')
+      }
+    },
   },
   data() {
     return {
-			keepInBounds: true,
-      editor: new Editor({
-				content: this.content,
-        extensions: [
-          new BulletList(),
-          new ListItem(),
-          new Placeholder({
-            emptyClass: 'is-empty',
-            emptyNodeText: this.placeholder,
-            showOnlyWhenEditable: true,
-          }),
-          new Italic(),
-          new Bold(),
-          new class extends Extension {
-            keys = () => ({ Enter: (state, dispatch, view) => true })
-          }(),
-				],
-				onUpdate: ({ getJSON, getHTML}) => {
-					// Clear timeout each time a key is pressed
-          clearTimeout(this.timeout)
-
-          const updateObj = {
-            id: this.id,
-            field: this.field,
-            type: this.type,
-            content: getHTML(),
-          }
-					
-					// Wait half a second without input before running update
-					this.timeout = setTimeout(() => {
-            this.update(updateObj)
-					}, 1000)
-				},
-      })
+      keepInBounds: true,
+      editor: null,
+      isFocused: false,
+      hasBeenEmptied: false
     }
-	},
+  },
+  computed: {
+    isQuestion: self => self.type === 'questions',
+    isOption: self => !self.isQuestion,
+    isEmpty: self => self.editor.getHTML() === '<p></p>'
+  },
   beforeDestroy() {
     this.editor.destroy()
 	},

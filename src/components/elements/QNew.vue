@@ -6,19 +6,18 @@
       class="newQMenu"
       absolute top
       :close-on-content-click="true"
+      :allow-overflow="true"
       min-width="260"
     >
       <template v-slot:activator="{ on }">
-        <div v-on="on" @click="setSkeleton">
-          <slot />
-        </div>
+        <div v-on="on"><slot /></div>
       </template>
 
       <vs-card>
         <div slot="header">
           <p>Select question type</p>
         </div>
-          <vs-list>
+          <vs-list v-observe-visibility="setSkeleton">
             <vs-list-item
               v-for="item in QTypes"
               class="puiMenuList puiSpaceOut QNewOption"
@@ -37,6 +36,7 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 import { get, call } from 'vuex-pathify'
 import '@/plugins/vuetify'
 import QSkeleton from '@/components/elements/QSkeleton'
@@ -44,18 +44,20 @@ import QSkeleton from '@/components/elements/QSkeleton'
 
 export default {
   data: () => ({
-    skeleton: false
+    skeleton: false,
+    menuOpen: false
   }),
   components: {
     QSkeleton
   },
   methods: {
     addQuestion: call('Qs/addQuestion'),
+    addOption: call('Qs/addOption'),
     addNewQ(type) {
       this.skeleton = false
-      this.addQuestion(type)
+      this.addQuestion({ type }).then(qID => this.addOption({ qID }))
     },
-    setSkeleton () { this.skeleton = !this.skeleton }
+    setSkeleton (visible) { this.skeleton = visible }
   },
   computed: {
     QTypes: get('Qs/QTypes')
