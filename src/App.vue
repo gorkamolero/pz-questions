@@ -5,14 +5,7 @@
 </template>
 
 <script>
-import '@/tempstyles.scss'
-import 'material-icons/iconfont/material-icons.css'
-// TODO: put in boiler
-import '@/utils/filters'
-import '@/plugins/observeVisibility'
-import PZBoiler from '@bit/pickzen.pui.core.pz-boiler/PZBoiler'
-import QBuilder from './components/templates/QBuilder'
-import QPreview from './components/QPreview'
+import PZBoiler from '@/components/core/PZBoiler'
 
 export default {
   name: 'app',

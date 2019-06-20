@@ -8,7 +8,6 @@
     "pui": "npm config set '@bit:registry' https://node.bit.dev && bit init && bit login"
   },
   "dependencies": {
-    "@bit/pickzen.pui.core.pz-boiler": "^1.0.0",
     "@bit/pickzen.pui.core.styles": "^1.0.5",
     "@bit/pickzen.pui.core.typer": "^0.0.1",
     "core-js": "^2.6.5",
