@@ -8,7 +8,8 @@
     "pui": "npm config set '@bit:registry' https://node.bit.dev && bit init && bit login"
   },
   "dependencies": {
-    "@bit/pickzen.pui.core.typer": "file:./src/components/core/typer",
+    "@bit/pickzen.pui.core.font-loader": "^1.0.0",
+    "@bit/pickzen.pui.core.vuesax-loader": "^0.0.1",
     "core-js": "^2.6.5",
     "material-icons": "^0.3.1",
     "splitpanes": "^1.14.2",

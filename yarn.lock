@@ -667,38 +667,14 @@
     lodash "^4.17.11"
     to-fast-properties "^2.0.0"
 
-"@bit/pickzen.pui.core.font-loader@1.0.0":
+"@bit/pickzen.pui.core.font-loader@^1.0.0":
   version "1.0.0"
   resolved "https://node.bit.dev/pickzen.pui.core.font-loader/-/pickzen.pui.core.font-loader-1.0.0.tgz#c0355f90048300a67a4410f43d13bd0f264df64d"
   integrity sha1-wDVfkASDAKZ6RBD0PRO9DyZN9k0=
   dependencies:
     webfontloader "^1.6.28"
 
-"@bit/pickzen.pui.core.pz-boiler@^1.0.0":
-  version "1.0.1"
-  resolved "https://node.bit.dev/pickzen.pui.core.pz-boiler/-/pickzen.pui.core.pz-boiler-1.0.1.tgz#44df51d2aa879c749776b974891f4787d63ff2d7"
-  integrity sha1-RN9R0qqHnHSXdrl0iR9Hh9Y/8tc=
-  dependencies:
-    "@bit/pickzen.pui.core.font-loader" "1.0.0"
-    "@bit/pickzen.pui.core.styles" "1.0.2"
-    "@bit/pickzen.pui.core.vuesax-loader" "0.0.1"
-
-"@bit/pickzen.pui.core.styles@1.0.2":
-  version "1.0.2"
-  resolved "https://node.bit.dev/pickzen.pui.core.styles/-/pickzen.pui.core.styles-1.0.2.tgz#7cde8afc9394c8d3ec27649708f688af312d0439"
-  integrity sha1-fN6K/JOUyNPsJ2SXCPaIrzEtBDk=
-
-"@bit/pickzen.pui.core.styles@^1.0.5":
-  version "1.0.5"
-  resolved "https://node.bit.dev/pickzen.pui.core.styles/-/pickzen.pui.core.styles-1.0.5.tgz#2a1e3c56cfc2d77a90a05736778271250b86bc4c"
-  integrity sha1-Kh48Vs/C13qQoFc2d4JxJQuGvEw=
-
-"@bit/pickzen.pui.core.typer@^0.0.1":
-  version "0.0.1"
-  resolved "https://node.bit.dev/pickzen.pui.core.typer/-/pickzen.pui.core.typer-0.0.1.tgz#77e34dcb0f72943525711977a5f125262c2ad192"
-  integrity sha1-d+NNyw9ylDUlcRl3pfElJiwq0ZI=
-
-"@bit/pickzen.pui.core.vuesax-loader@0.0.1":
+"@bit/pickzen.pui.core.vuesax-loader@^0.0.1":
   version "0.0.1"
   resolved "https://node.bit.dev/pickzen.pui.core.vuesax-loader/-/pickzen.pui.core.vuesax-loader-0.0.1.tgz#1ef83d2fcd938fce56b4c22880afc6eef1d695cf"
   integrity sha1-Hvg9L82Tj85WtMIogK/G7vHWlc8=
