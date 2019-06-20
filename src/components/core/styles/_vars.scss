@@ -1,0 +1,40 @@
+/*
+
+Vars & Theming
+
+*/
+
+:root {
+	// Color
+	--black: black;
+	--red: red;
+	--light-grey: #e8e8e8;
+  --lighter-grey: whitesmoke;
+
+	// Text
+	--text-light: grey;
+	
+	// Spacing
+	--space: 1rem;
+	--space-s: .5rem;
+	--space-l: 2rem;
+
+	// Borders
+	--borderColor: var(--black);
+	--borderStyle: solid;
+	--borderWidth: 1px;
+	--PickzenBorder: var(--borderColor) var(--borderStyle) var(--borderWidth);
+
+	// Transitions
+	--transSpeed: 300ms;
+	--transSpeed-lightning: 100ms;
+	--transMode: ease-out;
+	--transDelay: 0s;
+	--trans: var(--transSpeed-lightning) var(--transMode) var(--transDelay);
+
+	// Elements
+	--circleIconSize: 28px;
+
+	// Patterns
+	--slideFooterNav: 60px;  
+}
